@@ -3,7 +3,11 @@
 namespace App\Providers;
 
 // use Illuminate\Support\Facades\Gate;
+use App\Services\Auth\HeaderGuard;
+use Illuminate\Auth\TokenGuard;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Contracts\Foundation\Application;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -13,7 +17,7 @@ class AuthServiceProvider extends ServiceProvider
      * @var array<class-string, class-string>
      */
     protected $policies = [
-        //
+        // 'App\Models\Model' => 'App\Policies\ModelPolicy',
     ];
 
     /**
@@ -21,6 +25,8 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        Auth::extend('header', function (Application $app, string $name, array $config) {
+            return new HeaderGuard(Auth::createUserProvider($config['provider']), $app->make('request'));
+        });
     }
 }
