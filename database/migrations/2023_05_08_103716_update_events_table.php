@@ -11,17 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create("events", function (Blueprint $table) {
-            $table->id();
-            $table->text("event_name");
-            $table->ipAddress();
-            $table->bigInteger("user_id")->unsigned();
-            $table->timestamps();
+        Schema::table("events", function (Blueprint $table) {
+            $table->dropColumn("event_name");
+            $table->bigInteger("event_type_id")->unsigned();
 
             $table
-                ->foreign("user_id")
+                ->foreign("event_type_id")
                 ->references("id")
-                ->on("users")
+                ->on("event_types")
                 ->onDelete("cascade");
         });
     }
@@ -31,6 +28,9 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists("events");
+        Schema::table("events", function (Blueprint $table) {
+            $table->text("event_name");
+            $table->removeColumn("event_type_id");
+        });
     }
 };

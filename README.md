@@ -12,6 +12,12 @@
 git clone https://github.com/yageorgiy/prj01
 cd prj01
 cp .env.example .env
+
+# Настройка прав для директории проекта
+chgrp -R 33 ./
+chmod -R 775 ./
+
+# Запуск контейнера
 docker-compose up -d
 docker-compose exec php php artisan key:generate
 docker-compose exec php php artisan migrate:fresh --seeder=DatabaseSeeder

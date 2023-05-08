@@ -12,6 +12,11 @@ use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
+    /**
+     * Registering user for statistics
+     * @param Request $request
+     * @return JsonResponse
+     */
     public function registration(Request $request): JsonResponse
     {
         $data = $request->all();
@@ -22,11 +27,14 @@ class UserController extends Controller
             'password' => ['required'],
         ]);
 
+        // Validating fields
         if ($v->fails())
             return Response::json([
                 "error" => "Request body is incorrect"
             ])->setStatusCode(400);
 
+
+        // Whether the email exists
         if (
             User::query()
                 ->where("email", "=", $data["email"])

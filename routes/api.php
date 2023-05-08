@@ -16,8 +16,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::post("/register",UserController::class . "@registration");
-Route::post("/submit",  StatsController::class . "@submit");
-Route::get("/stats",    StatsController::class . "@stats");
+Route::post("/register",        UserController::class . "@registration");
+Route::post("/createEventType", StatsController::class . "@createEventType");
+Route::post("/submit",          StatsController::class . "@submit");
+Route::get("/stats",            StatsController::class . "@stats");
 
 

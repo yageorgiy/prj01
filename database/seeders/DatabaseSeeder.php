@@ -16,7 +16,6 @@ class DatabaseSeeder extends Seeder
         // \App\Models\User::factory(10)->create();
         // Anonymous user for statistics
         User::factory()->create([
-            'id' => 0,
             'name' => 'Anonymous',
             'email' => 'anonymous@localhost',
         ]);
