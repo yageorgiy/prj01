@@ -19,6 +19,7 @@ chmod -R 775 ./
 
 # Запуск контейнера
 docker-compose up -d
+docker-compose exec php composer update
 docker-compose exec php php artisan key:generate
 docker-compose exec php php artisan migrate:fresh --seeder=DatabaseSeeder
 ```
