@@ -20,7 +20,7 @@ services:
             - ./docker/php/prod.conf.d/www.conf:/usr/local/etc/php-fpm.d/www.conf
             - ./:/var/www
         depends_on:
-            - database
+            - mysql
         networks:
             - prj01-app
 
