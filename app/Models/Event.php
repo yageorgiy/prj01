@@ -16,7 +16,8 @@ class Event extends Model
 
     const TYPE_PER_EVENT = 1;
     const TYPE_PER_USER = 2;
-    const TYPE_PER_AUTH_STATUS = 3;
+    const TYPE_PER_IP = 3;
+    const TYPE_PER_AUTH_STATUS = 4;
 
     use HasFactory;
 

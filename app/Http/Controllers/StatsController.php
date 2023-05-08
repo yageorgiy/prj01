@@ -113,7 +113,12 @@ class StatsController extends Controller
         $data = $request->all();
 
         $v = Validator::make($data, [
-            'type' => Rule::in([Event::TYPE_PER_EVENT, Event::TYPE_PER_USER, Event::TYPE_PER_AUTH_STATUS]),
+            'type' => Rule::in([
+                Event::TYPE_PER_EVENT,
+                Event::TYPE_PER_USER,
+                Event::TYPE_PER_IP,
+                Event::TYPE_PER_AUTH_STATUS
+            ]),
             'event_type_name' => ['required'],
             'event_date_begin' => ['required', 'date'],
             'event_date_end' => ['required', 'date'],
@@ -140,6 +145,7 @@ class StatsController extends Controller
         $response = match ((int)$data["type"]) {
             Event::TYPE_PER_EVENT => $this->statsPerEvent($eventType, $data),
             Event::TYPE_PER_USER => $this->statsPerUser($eventType, $data),
+            Event::TYPE_PER_IP => $this->statsPerIP($eventType, $data),
             Event::TYPE_PER_AUTH_STATUS => $this->statsPerAuthStatus($eventType, $data)
         };
 
@@ -190,6 +196,28 @@ class StatsController extends Controller
             // Grouping by user id
             ->groupBy("user_id")
             ->with("user")
+            ->get();
+    }
+
+    /**
+     * Retrieve statistics per IP-address
+     * @param Model $eventType
+     * @param array $data
+     * @return Collection|array
+     */
+    private function statsPerIP(Model $eventType, array $data): Collection|array
+    {
+        return Event::query()
+            // Selecting count and user id
+            ->select(DB::raw("COUNT(id) as count"), "ip_address")
+
+            // Request params
+            ->where("event_type_id", "=", $eventType->id)
+            ->where("created_at", ">=", $data["event_date_begin"])
+            ->where("created_at", "<=", $data["event_date_end"])
+
+            // Grouping by user id
+            ->groupBy("ip_address")
             ->get();
     }
 
